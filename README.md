@@ -1,3 +1,4 @@
 # eCommerce
 sample ecommerce application
-Application initialized 2nd time
+#Sathish writes. Please get these change.
+# Application initialized 2nd time
