@@ -1,2 +1,3 @@
 # eCommerce
-sample ecommerce application
+sample ecommerce application.
+#Sathish writes. Please get these change.
