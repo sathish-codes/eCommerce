@@ -1,0 +1,104 @@
+
+
+Category -Table:
+CREATE TABLE `online-grocery`.`category` (
+  `Category_ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Category_ID`));
+  
+  
+  Product - Table:
+  CREATE TABLE `online-grocery`.`product` (
+  `Product_Id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `P_Name` VARCHAR(45) NOT NULL,
+  `Price` VARCHAR(45) NOT NULL,
+  `Description` VARCHAR(45) NOT NULL,
+  `Last_Update` VARCHAR(45) NOT NULL DEFAULT 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+  `P_Category_ID` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`Product_Id`),
+  INDEX `Category_ID_idx` (`P_Category_ID` ASC),
+  CONSTRAINT `Category_ID`
+    FOREIGN KEY (`P_Category_ID`)
+    REFERENCES `online-grocery`.`category` (`Category_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+	
+	Customer - Table:
+   CREATE TABLE `online-grocery`.`customer` (
+  `Customer_ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(45) NOT NULL,
+  `Phone` VARCHAR(45) NOT NULL,
+  `Address` VARCHAR(45) NOT NULL,
+  `City-Region` VARCHAR(45) NOT NULL,
+  `CC-Number` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`Customer_ID`));
+  
+  Customer_Order:
+  
+  CREATE TABLE `online-grocery`.`order_product` (
+  `Order_Product_ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Amount` VARCHAR(45) NOT NULL,
+  `Date_Created` VARCHAR(45) NOT NULL DEFAULT 'CURRENT_TIMESTAMP',
+  `Confirmation_Number` INT UNSIGNED NOT NULL,
+  `Order_Product_Customer_ID` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`Order_Product_ID`),
+  INDEX `Customer_ID_idx` (`Order_Product_Customer_ID` ASC),
+  CONSTRAINT `Customer_ID`
+    FOREIGN KEY (`Order_Product_Customer_ID`)
+    REFERENCES `online-grocery`.`customer` (`Customer_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+	
+
+customerorder_has_product:
+
+
+CREATE TABLE `online-grocery`.`customerorder_has_product` (
+  `Order_Product_ID` INT UNSIGNED NOT NULL,
+  `Product_Id` INT UNSIGNED NOT NULL,
+  INDEX (`Order_Product_ID` ASC),
+  PRIMARY KEY (`Order_Product_ID`, `Product_Id`),
+  INDEX `Product_Id_idx` (`Product_Id` ASC),
+  CONSTRAINT `Order_Product_ID`
+    FOREIGN KEY (`Order_Product_ID`)
+    REFERENCES `online-grocery`.`order_product` (`Order_Product_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Product_Id`
+    FOREIGN KEY (`Product_Id`)
+    REFERENCES `online-grocery`.`product` (`Product_Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+	
+	
+	ALTER TABLE `online-grocery`.`customerorder_has_product` 
+RENAME TO  `online-grocery`.`ordered_product` ;
+
+ALTER TABLE `online-grocery`.`ordered_product` 
+ADD COLUMN `Quantity` SMALLINT(20) UNSIGNED NOT NULL DEFAULT 1 AFTER `Product_Id`;
+
+
+
+
+	category_has_product:
+	
+	
+	CREATE TABLE `online-grocery`.`category_has_product` (
+  `Cat_ID` INT(10) UNSIGNED NOT NULL,
+  `Pro_ID` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`Cat_ID`, `Pro_ID`),
+  INDEX `Product_Id_idx` (`Pro_ID` ASC),
+  CONSTRAINT `fk_Category_ID`
+    FOREIGN KEY (`Cat_ID`)
+    REFERENCES `online-grocery`.`category` (`Category_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Product_Id`
+    FOREIGN KEY (`Pro_ID`)
+    REFERENCES `online-grocery`.`product` (`Product_Id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+	
+	
